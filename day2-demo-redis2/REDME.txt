@@ -1,3 +1,5 @@
+关键词: [redis][redisTemplate]
+
 1. 主要是为了想测试一下redis的zsReverseRange函数.
     redisTemplate.opsForZSet().reverseRangeWithScores, 运行成功
     redisTemplate.opsForZSet().add(key, value, score); 运行成功

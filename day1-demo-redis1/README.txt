@@ -1,6 +1,8 @@
+关键词: [redis][crud]
+
 运行：
     1. 本地启动redis-server。
-    2. 在 IDEA 里面跑 TestRedis 即可。
+    2. 在 IDEA 里面跑 TestRedis 即可。或者在命令行mvn test也行。
 
 内容：
     1. 十分简单，可以往redis保存数据，可以获取，可以删除。
