@@ -1,4 +1,4 @@
-package com.niuge.demos.day7;
+package com.niuge.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
