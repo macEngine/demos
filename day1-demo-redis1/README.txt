@@ -6,6 +6,8 @@
 
 内容：
     1. 十分简单，可以往redis保存数据，可以获取，可以删除。
+    2. 使用的是JedisConnectionFactory，不是LettuceConnectionFactory.
+    3. RedisConfiguration虽然配置了，其实没啥用，可以删除.
 
 注意：
     1. 通过继承CrudRepository接口，spring-data-redis 就可以操作 redis 库中的数据。
