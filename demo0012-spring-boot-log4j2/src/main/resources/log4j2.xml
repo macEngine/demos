@@ -7,11 +7,20 @@
         <File name="LogToFile" fileName="logs/app.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <!--
+                For example, for the category name "a.b.c" the pattern %c{2} will output "b.c".
+                For example, for the class name "org.apache.xyz.SomeClass", the pattern %C{1} will output "SomeClass".
+                c{1.}: c.n.d.r.HelloController
+                c{1.}: HelloController
+                %logger: com.niuge.demos.redis3.HelloController
+                t: Used to output the name of the thread that generated the logging event.
+
+                -->
             </PatternLayout>
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="com.mkyong" level="debug" additivity="false">
+        <Logger name="com.niuge.demos.redis3" level="debug" additivity="false">
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>
         </Logger>
