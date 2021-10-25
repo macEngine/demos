@@ -14,42 +14,44 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 //@SpringBootTest
 public class TestWeb3j {
 
-
+  BlockingQueue blockingQueue=new ArrayBlockingQueue<>(10);
   private Web3jConfig web3jConfig = new Web3jConfig();
 
   // 线程池
-  private ThreadPoolExecutor executorService;
+  private ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, blockingQueue);;
   // 关闭程序时候记得调用dispose()
   private Disposable subscribe;
 
   @Test
-  public void test() {
+  public void test() throws Exception{
     System.out.println("222222");
     // 获取web3j实例
     Web3j web3j = web3jConfig.getWeb3j();
 //    // 线程池初始化
 ////    initExecutePool();
 //
+//    EthBlock ethBlock =
+//        web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
+//    System.out.println(ethBlock.getBlock().getNumber());
 //    // 获取到上次同步最高块高
 ////    BigInteger max = searchIndex.ethBlockMaxNumber();
-    BigInteger max =   BigInteger.valueOf(1l);
+    BigInteger max = BigInteger.valueOf(13487165l);
 
-    System.out.println();
 //    // 从上一次的最高块+1开始同步到最新块 注意第三个参数true代表获取全量的transaction数据
 //
     subscribe = web3j.replayPastBlocksFlowable(DefaultBlockParameter.valueOf(max.add(BigInteger.ONE)), DefaultBlockParameterName.LATEST, true)
         .doOnError(e -> log.error("on error:{}", e.getMessage()))
         // subscribe 获取到EthBlock， executeBlock 处理块信息
         .subscribe(this::executeBlock, ex -> log.error("subscribe error:{}", ex.getMessage()));
-
-    System.out.println();
-    System.out.println();
   }
 
   public void execute(Runnable r) {
@@ -58,6 +60,7 @@ public class TestWeb3j {
 
   public void executeBlock(EthBlock block) {
     execute(() -> {
+      System.out.println("nihao3");
       // 获取到所需的块信息
       EthBlock.Block ethBlock = block.getBlock();
       // transaction信息获取
@@ -66,6 +69,10 @@ public class TestWeb3j {
   }
 
   public void executeTransaction(List<EthBlock.TransactionResult> transactions) {
+    System.out.println();
+    System.out.println("size is:" + transactions.size());
+    System.out.println();
+    System.out.println();
     if (transactions.size() == 0) {
       return;
     }
@@ -78,7 +85,7 @@ public class TestWeb3j {
         // TransactionReceipt 数据获取
         TransactionReceipt receipt = web3j.ethGetTransactionReceipt(transaction.getHash()).send().getResult();
         List<Log> logs = receipt.getLogs();
-        System.out.println(logs);
+        System.out.println("logs are: " + logs);
       }
     } catch (IOException e) {
       log.error("transaction input error, msg:{}", e.getMessage());
