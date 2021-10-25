@@ -11,9 +11,14 @@ public class Web3jConfig {
 
   // eth的rpc url 可使用上面提到的infura免费节点
   @Value("${eth.chain.rpc}")
-  private String rpc;
+  private String rpc = "https://mainnet.infura.io/v3/8896c141eb674fbf8c10452219bc6be5";
 
   private static Web3j web3j = null;
+
+  public static void main(String[] args) {
+    System.out.println("nihao");
+  }
+
 
   private synchronized Web3j init() {
     if (!ObjectUtils.isEmpty(web3j)) {
