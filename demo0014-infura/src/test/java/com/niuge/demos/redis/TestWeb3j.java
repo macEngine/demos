@@ -36,14 +36,7 @@ public class TestWeb3j {
     System.out.println("222222");
     // 获取web3j实例
     Web3j web3j = web3jConfig.getWeb3j();
-//    // 线程池初始化
-////    initExecutePool();
-//
-//    EthBlock ethBlock =
-//        web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
-//    System.out.println(ethBlock.getBlock().getNumber());
-//    // 获取到上次同步最高块高
-////    BigInteger max = searchIndex.ethBlockMaxNumber();
+
     BigInteger max = BigInteger.valueOf(13487165l);
 
 //    // 从上一次的最高块+1开始同步到最新块 注意第三个参数true代表获取全量的transaction数据
