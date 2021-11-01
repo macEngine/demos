@@ -20,68 +20,67 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-//@SpringBootTest
 public class TestWeb3j {
+    BlockingQueue blockingQueue = new ArrayBlockingQueue<>(10);
+    private Web3jConfig web3jConfig = new Web3jConfig();
 
-  BlockingQueue blockingQueue=new ArrayBlockingQueue<>(10);
-  private Web3jConfig web3jConfig = new Web3jConfig();
+    // 线程池
+    private ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, blockingQueue);
+    ;
+    // 关闭程序时候记得调用dispose()
+    private Disposable subscribe;
 
-  // 线程池
-  private ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES, blockingQueue);;
-  // 关闭程序时候记得调用dispose()
-  private Disposable subscribe;
+    @Test
+    public void test() throws Exception {
+        System.out.println("222222");
+        // 获取web3j实例
+        Web3j web3j = web3jConfig.getWeb3j();
 
-  @Test
-  public void test() throws Exception{
-    System.out.println("222222");
-    // 获取web3j实例
-    Web3j web3j = web3jConfig.getWeb3j();
-
-    BigInteger max = BigInteger.valueOf(13487165l);
+        BigInteger max = BigInteger.valueOf(13487165l);
 
 //    // 从上一次的最高块+1开始同步到最新块 注意第三个参数true代表获取全量的transaction数据
 //
-    subscribe = web3j.replayPastBlocksFlowable(DefaultBlockParameter.valueOf(max.add(BigInteger.ONE)), DefaultBlockParameterName.LATEST, true)
-        .doOnError(e -> log.error("on error:{}", e.getMessage()))
-        // subscribe 获取到EthBlock， executeBlock 处理块信息
-        .subscribe(this::executeBlock, ex -> log.error("subscribe error:{}", ex.getMessage()));
-  }
-
-  public void execute(Runnable r) {
-    executorService.execute(r);
-  }
-
-  public void executeBlock(EthBlock block) {
-    execute(() -> {
-      System.out.println("nihao3");
-      // 获取到所需的块信息
-      EthBlock.Block ethBlock = block.getBlock();
-      // transaction信息获取
-      executeTransaction(ethBlock.getTransactions());
-    });
-  }
-
-  public void executeTransaction(List<EthBlock.TransactionResult> transactions) {
-    System.out.println();
-    System.out.println("size is:" + transactions.size());
-    System.out.println();
-    System.out.println();
-    if (transactions.size() == 0) {
-      return;
+        web3j.replayPastBlocksFlowable(
+                DefaultBlockParameter.valueOf(max.add(BigInteger.ONE)),
+                DefaultBlockParameterName.LATEST,
+                true);
     }
-    try {
-      Web3j web3j = web3jConfig.getWeb3j();
-      for (EthBlock.TransactionResult<EthBlock.TransactionObject> transactionResult : transactions) {
-        EthBlock.TransactionObject transaction = transactionResult.get();
-        // log 数据的获取 记得过滤一下已经removed 的log数据
+
+    public void execute(Runnable r) {
+//        executorService.execute(r);
+    }
+
+    public void executeBlock(EthBlock block) {
+        execute(() -> {
+            System.out.println("nihao3");
+            // 获取到所需的块信息
+            EthBlock.Block ethBlock = block.getBlock();
+            // transaction信息获取
+            executeTransaction(ethBlock.getTransactions());
+        });
+    }
+
+    public void executeTransaction(List<EthBlock.TransactionResult> transactions) {
+        System.out.println();
+        System.out.println("size is:" + transactions.size());
+        System.out.println();
+        System.out.println();
+        if (transactions.size() == 0) {
+            return;
+        }
+        try {
+            Web3j web3j = web3jConfig.getWeb3j();
+            for (EthBlock.TransactionResult<EthBlock.TransactionObject> transactionResult : transactions) {
+                EthBlock.TransactionObject transaction = transactionResult.get();
+                // log 数据的获取 记得过滤一下已经removed 的log数据
 //        executeLog(receipt.getLogs());
-        // TransactionReceipt 数据获取
-        TransactionReceipt receipt = web3j.ethGetTransactionReceipt(transaction.getHash()).send().getResult();
-        List<Log> logs = receipt.getLogs();
-        System.out.println("logs are: " + logs);
-      }
-    } catch (IOException e) {
-      log.error("transaction input error, msg:{}", e.getMessage());
+                // TransactionReceipt 数据获取
+                TransactionReceipt receipt = web3j.ethGetTransactionReceipt(transaction.getHash()).send().getResult();
+                List<Log> logs = receipt.getLogs();
+                System.out.println("logs are: " + logs);
+            }
+        } catch (IOException e) {
+            log.error("transaction input error, msg:{}", e.getMessage());
+        }
     }
-  }
 }
