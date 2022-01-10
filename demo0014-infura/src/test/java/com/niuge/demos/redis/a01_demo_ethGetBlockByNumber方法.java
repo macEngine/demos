@@ -32,6 +32,7 @@ public class a01_demo_ethGetBlockByNumber方法 {
         EthBlock ethBlock =
             web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).send();
 
-        System.out.println(ethBlock.getBlock().getTransactions().size());
+//        System.out.println(ethBlock.getBlock().getTransactions().size());
+        System.out.println(ethBlock.getBlock().getNumber());
     }
 }
