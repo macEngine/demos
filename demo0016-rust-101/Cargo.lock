@@ -685,6 +685,8 @@ version = "0.1.0"
 dependencies = [
  "poc-framework",
  "solend-token-lending",
+ "spl-associated-token-account",
+ "spl-token",
 ]
 
 [[package]]

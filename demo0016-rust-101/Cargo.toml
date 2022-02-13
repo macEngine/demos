@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 poc-framework = "0.1.0"
 solend-token-lending = "0.1.1"
+spl-associated-token-account = "1.0.3"
+spl-token = "3.2.0"
