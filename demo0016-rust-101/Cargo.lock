@@ -1938,8 +1938,6 @@ checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
 [[package]]
 name = "poc-framework"
 version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4725295eb4d384414301d8cd910c38a37c50eb8757c207b7f9e5a04de57e07f9"
 dependencies = [
  "bincode",
  "borsh",

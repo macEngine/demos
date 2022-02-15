@@ -10,7 +10,7 @@ use poc_framework::solana_sdk::{
     signature::{Keypair, Signer},
 };
 
-use poc_framework::solana_sdk::sysvar::clock::Clock;
+use poc_framework::solana_sdk::sysvar;
 use poc_framework::spl_associated_token_account::get_associated_token_address;
 use poc_framework::solana_client;
 use poc_framework::solana_sdk::account::Account;
@@ -83,9 +83,10 @@ pub fn demo002() {
     // let clock = solana_program::sysvar::;
     // let clock = solana_program::sysvar::clock::Clock::get();
 
-    // let clock = mainnet_client.get_account(&clock::ID).unwrap();
-    // env.bank.store_account(&Clock::ID, &clock.into());
-
+    println!("{}", sysvar::clock::ID);
+    println!("{}", &sysvar::clock::ID);
+    let clock = mainnet_client.get_account(&sysvar::clock::ID).unwrap();
+    env.bank.store_account(&sysvar::clock::ID,  &clock.into());
 
     // create obligation
 
@@ -135,6 +136,7 @@ pub fn demo002() {
         i += 1;
     };
     println!("{},{},{},{}", i, collateral_amount,output,input);
+
     println!(
         "Amount before: {} BTC",
         env.get_unpacked_account::<SPLAccount>(liquidity_ata)
@@ -142,7 +144,16 @@ pub fn demo002() {
             .amount as f64
             / 1_000_000.0
     );
+    println!(
+        "collateral Amount after: {} BTC",
+        env.get_unpacked_account::<SPLAccount>(collateral_ata)
+            .unwrap()
+            .amount as f64
+            / 1_000_000.0
+    );
     println!("Using {} BTC", input as f64 / 1_000_000.0);
+    let input = input *10;
+    let collateral_amount = collateral_amount *10;
 
 // deposit and withdraw btc
     env.execute_as_transaction(
@@ -190,6 +201,13 @@ pub fn demo002() {
     println!(
         "Amount after: {} BTC",
         env.get_unpacked_account::<SPLAccount>(liquidity_ata)
+            .unwrap()
+            .amount as f64
+            / 1_000_000.0
+    );
+    println!(
+        "collateral Amount after: {} BTC",
+        env.get_unpacked_account::<SPLAccount>(collateral_ata)
             .unwrap()
             .amount as f64
             / 1_000_000.0
