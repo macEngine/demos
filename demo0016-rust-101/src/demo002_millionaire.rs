@@ -83,8 +83,6 @@ pub fn demo002() {
     // let clock = solana_program::sysvar::;
     // let clock = solana_program::sysvar::clock::Clock::get();
 
-    println!("{}", sysvar::clock::ID);
-    println!("{}", &sysvar::clock::ID);
     let clock = mainnet_client.get_account(&sysvar::clock::ID).unwrap();
     env.bank.store_account(&sysvar::clock::ID,  &clock.into());
 
@@ -183,17 +181,17 @@ pub fn demo002() {
                 vec![],
             ),
             // withdraw
-            solend_token_lending::instruction::redeem_reserve_collateral(
-                solend_program_key,
-                collateral_amount,
-                collateral_ata,
-                liquidity_ata,
-                reserve_key,
-                reserve.collateral.mint_pubkey,
-                reserve.liquidity.supply_pubkey,
-                lending_market_key,
-                attacker.pubkey(),
-            ),
+            // solend_token_lending::instruction::redeem_reserve_collateral(
+            //     solend_program_key,
+            //     collateral_amount,
+            //     collateral_ata,
+            //     liquidity_ata,
+            //     reserve_key,
+            //     reserve.collateral.mint_pubkey,
+            //     reserve.liquidity.supply_pubkey,
+            //     lending_market_key,
+            //     attacker.pubkey(),
+            // ),
         ],
         &[&attacker],
     );
@@ -211,5 +209,9 @@ pub fn demo002() {
             .unwrap()
             .amount as f64
             / 1_000_000.0
+    );
+    println!(
+        "collateral Amount after: {} BTC",
+        env.get_account(collateral_ata).unwrap().lamports
     );
 }

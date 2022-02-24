@@ -2996,8 +2996,6 @@ dependencies = [
 [[package]]
 name = "solana-runtime"
 version = "1.8.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f0674190332f046c47e6e495309d9ac24316383fe7eda0d92535a1ccddd715b"
 dependencies = [
  "arrayref",
  "bincode",
@@ -3229,8 +3227,6 @@ dependencies = [
 [[package]]
 name = "solend-token-lending"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9575a816f2f4b256efc4cf0ceb06257aa31ca19a00d566547e8d9239b586f76"
 dependencies = [
  "arrayref",
  "bytemuck",
