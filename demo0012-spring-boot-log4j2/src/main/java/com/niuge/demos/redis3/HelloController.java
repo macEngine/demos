@@ -2,12 +2,16 @@ package com.niuge.demos.redis3;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class HelloController {
@@ -35,4 +39,10 @@ public class HelloController {
     return 100;
   }
 
+  @PostMapping(value =  "/translate")
+  @ResponseBody
+  public String translate() {
+    String result = new Random().nextInt(100) + "";
+    return "{\"code\": 200, \"data\": \"测试" + result + "\"}";
+  }
 }
