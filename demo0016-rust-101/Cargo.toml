@@ -14,4 +14,7 @@ spl-token = "3.2.0"
 poc-framework = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/poc-framework-0.1.4/" }
 solana-runtime = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/solana-runtime-1.8.11/"}
 solend-token-lending = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/solend-token-lending-0.1.1/"}
+solana-program = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/solana-program-1.8.11/" }
+solana-runtime = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/solana-runtime-1.8.11/" }
+solana-bpf-loader-program = { path = "/Users/suwenjie/.cargo/registry/src/github.com-1ecc6299db9ec823/solana-bpf-loader-program-1.8.11/" }
 

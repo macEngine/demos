@@ -2620,8 +2620,6 @@ dependencies = [
 [[package]]
 name = "solana-bpf-loader-program"
 version = "1.8.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "faae00e379e1e414eab8e44818a2e0f08310e40a438a398bd09050669ca7d5ca"
 dependencies = [
  "bincode",
  "byteorder",
@@ -2928,8 +2926,6 @@ dependencies = [
 [[package]]
 name = "solana-program"
 version = "1.8.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8b7c216553c588565e72bb4e3f683d54c46d90f344756141c101420337225ba7"
 dependencies = [
  "base64 0.13.0",
  "bincode",

